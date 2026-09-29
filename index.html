@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>김선영 보험파트너 - 무료 보험점검</title>
+  <style>
+    /* ==========================================
+       기본 리셋 및 공통 스타일
+    ========================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Segoe UI", Roboto, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #e5e7eb;
+      color: #111827;
+      line-height: 1.6;
+      padding: 0 16px 85px 16px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* ==========================================
+       0. 최상단 고정 헤더
+    ========================================== */
+    .top-sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #d1d5db;
+      padding: 8px 16px;
+      margin: 0 -16px 16px -16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .top-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .top-header-img {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+    }
+
+    .top-header-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: -0.3px;
+    }
+
+    .top-header-logo {
+      height: 24px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* ==========================================
+       애니메이션 및 카드 효과
+    ========================================== */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+      }
+      50% {
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      }
+    }
+
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .input-error {
+      border-color: #ef4444 !important;
+      animation: shakeError 0.4s ease-in-out;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+    }
+
+    .agree-error {
+      color: #ef4444 !important;
+      animation: shakeError 0.4s ease-in-out;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-bottom: 18px;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.08);
+      animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    .sec-title {
+      font-size: 21px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .sec-desc {
+      font-size: 15px;
+      color: #4b5563;
+      margin-bottom: 18px;
+      word-break: keep-all;
+    }
+
+    /* ==========================================
+       메인 히어로 카드 (사진 확대 & 가장자리 흐리게)
+    ========================================== */
+    .hero-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      padding: 24px 20px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .hero-badge-wrap {
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .sub-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      letter-spacing: -0.3px;
+    }
+
+    .hero-split-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-text-content {
+      text-align: left;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.38;
+      color: #111827;
+      margin-bottom: 10px;
+      word-break: keep-all;
+      letter-spacing: -0.8px;
+    }
+
+    .hero-title span {
+      color: #ff7a00;
+      display: inline-block;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: #374151;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    /* 프로필 박스: 텍스트 삭제 후 여백 최적화 */
+    .hero-profile-box {
+      width: 100%;
+      background-color: transparent;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* 사진 확대 및 가장자리 부드럽게 흐려지는 마스크 효과 */
+    .hero-profile-img-wrap {
+      width: 190px;
+      height: 230px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      -webkit-mask-image: radial-gradient(circle at center, black 65%, rgba(0, 0, 0, 0.1) 94%, transparent 100%);
+      mask-image: radial-gradient(circle at center, black 65%, rgba(0, 0, 0, 0.1) 94%, transparent 100%);
+    }
+
+    .hero-profile-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    @media (min-width: 480px) {
+      .hero-split-container {
+        flex-direction: row;
+        align-items: center;
+      }
+      .hero-text-content {
+        flex: 1;
+      }
+      .hero-profile-box {
+        width: 210px;
+      }
+      .hero-profile-img-wrap {
+        width: 200px;
+        height: 240px;
+      }
+    }
+
+    /* ==========================================
+       1. 필수 점검 항목
+    ========================================== */
+    .check-box-danger {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .check-box-danger:last-child {
+      margin-bottom: 0;
+    }
+
+    .check-title-danger {
+      font-size: 14px;
+      font-weight: 800;
+      color: #e11d48;
+      letter-spacing: -0.4px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    /* ==========================================
+       2. 혜택 그리드 영역
+    ========================================== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .benefit-item {
+      background: #dbeafe;
+      border-radius: 14px;
+      padding: 18px 12px;
+      border: 1px solid #bfdbfe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .benefit-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #1e40af;
+      word-break: keep-all;
+      letter-spacing: -0.3px;
+    }
+
+    /* ==========================================
+       3. 사례 비교 영역
+    ========================================== */
+    .case-box {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .case-box:last-child {
+      margin-bottom: 0;
+    }
+
+    .case-header {
+      font-size: 13px;
+      color: #6b7280;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .case-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .compare-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .badge-before {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    .badge-after {
+      background: #dcfce7;
+      color: #166534;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 800;
+    }
+
+    /* ==========================================
+       3-1. 상담 절차 안내 (단계별)
+    ========================================== */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 12px;
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    .step-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .step-item:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 17px;
+      top: 36px;
+      bottom: 0;
+      width: 2px;
+      background: #dbeafe;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .step-body {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      flex: 1;
+    }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 4px;
+      word-break: keep-all;
+    }
+
+    .step-desc {
+      font-size: 13.5px;
+      color: #4b5563;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+
+    .step-tag {
+      display: inline-block;
+      margin-top: 6px;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* ==========================================
+       4. 프로필 영역
+    ========================================== */
+    .contact-card {
+      text-align: center;
+      padding: 20px 16px;
+    }
+
+    .profile-img-wrap {
+      max-width: 180px;
+      width: 100%;
+      height: 210px;
+      margin: 0 auto 12px auto;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .phone-number-big {
+      font-size: 26px;
+      font-weight: 900;
+      color: #2563eb;
+      margin-top: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    /* ==========================================
+       5. 상담 정보 입력 폼
+    ========================================== */
+    .form-card {
+      background: #ffffff;
+      padding: 20px 16px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 15px;
+      color: #111827;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .agree-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 14px 0;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .agree-wrap input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+
+    .agree-text {
+      font-size: 13.5px;
+      color: #4b5563;
+      font-weight: 600;
+    }
+
+    .form-submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
+      transition: transform 0.15s ease;
+    }
+
+    .form-submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* 푸터 */
+    .footer {
+      text-align: center;
+      padding: 16px 10px;
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    /* ==========================================
+       하단 고정 상담바
+    ========================================== */
+    .sticky-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+    }
+
+    .sticky-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 10px 4px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      width: 100%;
+      white-space: nowrap;
+    }
+
+    .action-btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-phone {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+    }
+
+    .btn-kakao {
+      background: linear-gradient(135deg, #fee500 0%, #facc15 100%);
+      color: #3c1e1e;
+    }
+
+    .btn-apply {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: #ffffff;
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    .svg-icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    @media (min-width: 520px) {
+      .compare-wrap {
+        flex-direction: row;
+      }
+      .badge-before, .badge-after {
+        flex: 1;
+      }
+      .action-btn {
+        font-size: 15px;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 0. 최상단 고정 헤더 -->
+  <header class="top-sticky-header">
+    <div class="top-header-left">
+      <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1789777195/%EA%B9%80%EC%84%A0%EC%98%81%ED%94%84%EB%A1%9C%ED%95%84.png" alt="김선영 프로필" class="top-header-img" />
+      <span class="top-header-title">김선영 보험파트너</span>
+    </div>
+    <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1789868955/%EB%A9%94%ED%83%80%EB%A6%AC%EC%B9%98%EB%A1%9C%EA%B3%A01%ED%88%AC%EB%AA%85.png" alt="메타리치 로고" class="top-header-logo" />
+  </header>
+
+  <!-- 1. 메인 히어로 카드 (사진 확대, 테두리 페더 흐림 효과, 글씨 삭제) -->
+  <div class="card hero-card">
+    <div class="hero-badge-wrap">
+      <span class="sub-badge">가입 강요 없는 100% 무료 점검</span>
+    </div>
+
+    <div class="hero-split-container">
+      <div class="hero-text-content">
+        <h1 class="hero-title">
+          "매달 내는 보험료,<br />
+          <span>정작 아플 때 제대로 나올까요?</span>"
+        </h1>
+        <p class="hero-desc">
+          나도 모르게 가입된 <strong>갱신형 보험료 폭탄부터</strong><br />
+          <strong>못 받은 보험금, 담보확인</strong>까지<br />제가 도와드리겠습니다
+        </p>
+      </div>
+
+      <div class="hero-profile-box">
+        <div class="hero-profile-img-wrap">
+          <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1790657319/file_000000009a7881fbb1813458c74e3a91.png" alt="김선영 보험파트너 프로필" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 내 보험 필수 점검 항목 -->
+  <div class="card">
+    <h2 class="sec-title">내 보험 필수 점검 항목</h2>
+    <p class="sec-desc">증권에서 딱 4가지만 확인하면 내 소중한 돈을 지킬 수 있습니다.</p>
+
+    <div class="check-box-danger">
+      <div class="check-title-danger">갱신형 유무 (은퇴 후 보험료 폭탄 위험)</div>
+    </div>
+
+    <div class="check-box-danger">
+      <div class="check-title-danger">보장 범위 (뇌·심장 100% 보장 여부)</div>
+    </div>
+
+    <div class="check-box-danger">
+      <div class="check-title-danger">보험료 적절성 (불필요 특약 다이어트)</div>
+    </div>
+
+    <div class="check-box-danger">
+      <div class="check-title-danger">실손보험 종류 (1세대 vs 5세대 정밀 점검)</div>
+    </div>
+  </div>
+
+  <!-- 3. 김선영 파트너가 드리는 혜택 -->
+  <div class="card">
+    <h2 class="sec-title">김선영 파트너가 드리는 혜택</h2>
+    <p class="sec-desc">가입만 시키는 설계사가 아닌, 고객 편에서 끝까지 보상 권리를 지킵니다.</p>
+
+    <div class="grid-2">
+      <div class="benefit-item">
+        <div class="benefit-title">전 보험사 무료 통합 점검</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-title">숨은 보험금 역추적 환급</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-title">보험금 청구 100% 대행</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-title">좋은 보험 사수 & 지출 절감</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 실제 보장 점검 리모델링 사례 -->
+  <div class="card">
+    <h2 class="sec-title">실제 보장 점검 리모델링 사례</h2>
+    <p class="sec-desc">김선영 파트너를 만난 실제 고객들의 데이터입니다.</p>
+
+    <div class="case-box">
+      <div class="case-header">사례 1 · 40대 직장인 이OO님</div>
+      <div class="case-title">3년 갱신형 ➔ 100세 비갱신 확정 전환</div>
+      <div class="compare-wrap">
+        <div class="badge-before">월 18.5만 (갱신폭탄 위험)</div>
+        <div class="badge-after">월 13.8만 (비갱신 확정)</div>
+      </div>
+    </div>
+
+    <div class="case-box">
+      <div class="case-header">사례 2 · 30대 여성 박OO님</div>
+      <div class="case-title">뇌출혈만 ➔ 뇌혈관질환 100% 확대 & 미청구금 환급</div>
+      <div class="compare-wrap">
+        <div class="badge-before">뇌경색 미보장 (0원 지급)</div>
+        <div class="badge-after">뇌혈관·심혈관 100%</div>
+      </div>
+    </div>
+
+    <div class="case-box">
+      <div class="case-header">사례 3 · 50대 부부 김OO님</div>
+      <div class="case-title">부부 중복 종신보험 및 군더더기 특약 정리</div>
+      <div class="compare-wrap">
+        <div class="badge-before">부부 합산 월 68만 원</div>
+        <div class="badge-after">부부 합산 월 41만 원</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 보험 상담 절차 안내 -->
+  <div class="card">
+    <h2 class="sec-title">보험 상담 절차 안내</h2>
+    <p class="sec-desc">복잡하지 않아요. 아래 4단계로 편하게 진행됩니다.</p>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">전화 또는 카톡으로 상담 신청</div>
+          <div class="step-desc">하단 버튼으로 편하신 방법을 선택해 연락 주세요. 부담스러운 방문 권유는 없습니다.</div>
+          <span class="step-tag">1분 소요</span>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">보험증권 사진 전달</div>
+          <div class="step-desc">보험 증권 사진을 카톡으로 보내주시면 방문 없이 전체 내역을 확인합니다.</div>
+          <span class="step-tag">증권 없어도 조회 가능</span>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">무료 정밀 분석 리포트 제공</div>
+          <div class="step-desc">갱신형 여부, 보장 공백, 숨은 보험금까지 정리한 맞춤 리포트를 보내드립니다.</div>
+          <span class="step-tag">1~2일 소요</span>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">원하실 때만 보장 리모델링 진행</div>
+          <div class="step-desc">리포트를 확인하시고 필요하다고 판단되실 때만 진행합니다.</div>
+          <span class="step-tag">가입 강요 없음</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 김선영 파트너 프로필 -->
+  <div class="card contact-card">
+    <div class="profile-img-wrap">
+      <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1789777195/%EA%B9%80%EC%84%A0%EC%98%81%ED%94%84%EB%A1%9C%ED%95%84.png" alt="김선영 파트너 프로필 사진" />
+    </div>
+
+    <h2 class="sec-title" style="font-size: 19px; margin-bottom: 4px;">김선영 파트너 1:1 상담</h2>
+    <p class="sec-desc" style="font-size: 14px; margin-bottom: 8px;">가입 권유 없이 객관적으로 답변해 드립니다.</p>
+
+    <div class="phone-number-big">
+      <a href="tel:01088227103">010-8822-7103</a>
+    </div>
+  </div>
+
+  <!-- 7. 무료 상담 신청 정보 입력 폼 -->
+  <div class="card form-card" id="consult-form">
+    <h2 class="sec-title" style="font-size: 19px; margin-bottom: 4px;">무료 상담 신청</h2>
+    <p class="sec-desc" style="font-size: 14px; margin-bottom: 14px;">정보를 남겨주시면 확인 후 신속하게 연락드리겠습니다.</p>
+
+    <form onsubmit="submitForm(event)" novalidate>
+      <div class="form-group">
+        <label for="userName" class="form-label">이름</label>
+        <input type="text" id="userName" class="form-input" placeholder="성함을 입력해주세요" autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label for="userPhone" class="form-label">연락처</label>
+        <input type="tel" id="userPhone" class="form-input" placeholder="010-0000-0000" oninput="formatPhoneNumber(this)" maxlength="13" autocomplete="off" />
+      </div>
+
+      <label class="agree-wrap" id="agreeWrap">
+        <input type="checkbox" id="userAgree" />
+        <span class="agree-text">[필수] 개인정보 수집 및 이용에 동의합니다.</span>
+      </label>
+
+      <button type="submit" class="form-submit-btn">상담 신청하기</button>
+    </form>
+  </div>
+
+  <!-- 푸터 -->
+  <div class="footer">
+    <p><strong>김선영 보험파트너 공식 상담센터</strong></p>
+    <p>전화문의: 010-8822-7103 | 365일 연중무휴 무료 상담</p>
+    <p>© 2026 김선영 보험파트너. All Rights Reserved.</p>
+  </div>
+
+  <!-- 하단 고정 전화/카톡/상담신청 바 -->
+  <div class="sticky-bottom-bar">
+    <div class="sticky-inner">
+      <a href="tel:01088227103" class="action-btn btn-phone">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        <span>전화상담</span>
+      </a>
+      <button onclick="openKakao()" class="action-btn btn-kakao">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.185-9 7.115 0 2.557 1.707 4.8 4.27 6.054-.188.702-.682 2.545-.78 2.94-.123.49.18.483.379.352.157-.103 2.525-1.713 3.548-2.41.52.077 1.05.119 1.583.119 4.97 0 9-3.185 9-7.115S16.97 3 12 3z"/></svg>
+        <span>카톡상담</span>
+      </button>
+      <button onclick="scrollToForm()" class="action-btn btn-apply">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+        <span>상담신청</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function formatPhoneNumber(input) {
+      var value = input.value.replace(/[^0-9]/g, "");
+      if (value.length > 11) value = value.slice(0, 11);
+
+      var formatted = "";
+      if (value.length < 4) {
+        formatted = value;
+      } else if (value.length < 7) {
+        formatted = value.substr(0, 3) + "-" + value.substr(3);
+      } else if (value.length < 11) {
+        formatted = value.substr(0, 3) + "-" + value.substr(3, 3) + "-" + value.substr(6);
+      } else {
+        formatted = value.substr(0, 3) + "-" + value.substr(3, 4) + "-" + value.substr(7);
+      }
+      input.value = formatted;
+    }
+
+    function openKakao() {
+      window.open("https://open.kakao.com/", "_blank");
+    }
+
+    function scrollToForm() {
+      var formSec = document.getElementById("consult-form");
+      if (formSec) {
+        var headerOffset = 70;
+        var elementPosition = formSec.getBoundingClientRect().top;
+        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+
+        setTimeout(function() {
+          document.getElementById("userName").focus({ preventScroll: true });
+        }, 500);
+      }
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+
+      var nameInput = document.getElementById("userName");
+      var phoneInput = document.getElementById("userPhone");
+      var agreeCheckbox = document.getElementById("userAgree");
+      var agreeWrap = document.getElementById("agreeWrap");
+
+      nameInput.classList.remove("input-error");
+      phoneInput.classList.remove("input-error");
+      agreeWrap.classList.remove("agree-error");
+
+      var isValid = true;
+      var firstInvalidInput = null;
+
+      if (!nameInput.value.trim()) {
+        isValid = false;
+        nameInput.classList.add("input-error");
+        if (!firstInvalidInput) firstInvalidInput = nameInput;
+      }
+
+      var rawPhone = phoneInput.value.replace(/[^0-9]/g, "");
+      if (rawPhone.length < 10) {
+        isValid = false;
+        phoneInput.classList.add("input-error");
+        if (!firstInvalidInput) firstInvalidInput = phoneInput;
+      }
+
+      if (!agreeCheckbox.checked) {
+        isValid = false;
+        agreeWrap.classList.add("agree-error");
+        if (!firstInvalidInput) firstInvalidInput = agreeCheckbox;
+      }
+
+      if (!isValid) {
+        if (firstInvalidInput && firstInvalidInput !== agreeCheckbox) {
+          firstInvalidInput.focus({ preventScroll: true });
+        }
+        
+        setTimeout(function() {
+          nameInput.classList.remove("input-error");
+          phoneInput.classList.remove("input-error");
+          agreeWrap.classList.remove("agree-error");
+        }, 1000);
+
+        return;
+      }
+
+      alert(nameInput.value.trim() + "님, 상담 신청이 완료되었습니다. 빠른 시일 내에 연락드리겠습니다!");
+      event.target.reset();
+    }
+  </script>
+</body>
+</html>
