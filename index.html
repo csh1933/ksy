@@ -53,7 +53,9 @@
       -webkit-backdrop-filter: blur(8px);
       border-bottom: 1px solid #d1d5db;
       padding: 8px 16px;
-      margin: 0 -16px 16px -16px;
+      margin-left: -16px;
+      margin-right: -16px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -674,8 +676,8 @@
     <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1790855580/metarich.png" alt="메타리치 로고" class="top-header-logo" />
   </header>
 
-  <!-- 1. 메인 히어로 카드 -->
-  <div class="card hero-card scroll-reveal">
+  <!-- 1. 메인 히어로 카드 (첫 번째 카드는 초기 로딩 시 즉시 노출) -->
+  <div class="card hero-card scroll-reveal revealed">
     <div class="hero-badge-wrap">
       <span class="sub-badge">가입 강요 없는 100% 무료 점검</span>
     </div>
@@ -886,9 +888,18 @@
 
   <script>
     // ==========================================
-    // 무한 반복 스크롤 인터랙션 트리거
+    // 1. 브라우저 스크롤 위치 복원 끄기 & 상단(0,0) 강제 고정
+    // ==========================================
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    // ==========================================
+    // 2. 무한 반복 스크롤 인터랙션 트리거
     // ==========================================
     document.addEventListener("DOMContentLoaded", function () {
+      window.scrollTo(0, 0);
       document.body.classList.add("js-ready");
       var revealElements = document.querySelectorAll(".scroll-reveal");
 
@@ -897,16 +908,17 @@
           function (entries) {
             entries.forEach(function (entry) {
               if (entry.isIntersecting) {
-                // 화면 안으로 들어오면 숑- 튀어오름
                 entry.target.classList.add("revealed");
               } else {
-                // 화면 밖으로 벗어나면 초기화 (다시 스크롤할 때 반복 재생)
-                entry.target.classList.remove("revealed");
+                // 첫 번째 히어로 카드는 항상 상단에 머무르므로 화면 위에서 벗어났을 때만 초기화
+                if (!entry.target.classList.contains("hero-card")) {
+                  entry.target.classList.remove("revealed");
+                }
               }
             });
           },
           {
-            threshold: 0.15,
+            threshold: 0.12,
             rootMargin: "0px 0px -20px 0px"
           }
         );
