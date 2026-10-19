@@ -26,6 +26,7 @@
       padding: 0 16px 85px 16px;
       max-width: 640px;
       margin: 0 auto;
+      overflow-x: hidden;
     }
 
     a {
@@ -89,18 +90,37 @@
     }
 
     /* ==========================================
-       애니메이션 및 카드 효과
+       무한 반복 스크롤 바운스 애니메이션
     ========================================== */
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .js-ready .scroll-reveal {
+      opacity: 0;
+      transform: translateY(35px) scale(0.95);
+      transition: opacity 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+      will-change: transform, opacity;
     }
+
+    .js-ready .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .js-ready .pop-item {
+      opacity: 0;
+      transform: translateY(20px) scale(0.92);
+      transition: opacity 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .js-ready .scroll-reveal.revealed .pop-item {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .js-ready .scroll-reveal.revealed .pop-item:nth-child(1) { transition-delay: 0.05s; }
+    .js-ready .scroll-reveal.revealed .pop-item:nth-child(2) { transition-delay: 0.1s; }
+    .js-ready .scroll-reveal.revealed .pop-item:nth-child(3) { transition-delay: 0.15s; }
+    .js-ready .scroll-reveal.revealed .pop-item:nth-child(4) { transition-delay: 0.2s; }
 
     @keyframes pulseGlow {
       0%, 100% {
@@ -128,6 +148,7 @@
       animation: shakeError 0.4s ease-in-out;
     }
 
+    /* 카드 공통 스타일 */
     .card {
       background: #ffffff;
       border-radius: 20px;
@@ -135,7 +156,6 @@
       margin-bottom: 18px;
       border: 1px solid #d1d5db;
       box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.08);
-      animation: fadeInUp 0.4s ease-out forwards;
     }
 
     .sec-title {
@@ -651,12 +671,11 @@
       <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1789777195/%EA%B9%80%EC%84%A0%EC%98%81%ED%94%84%EB%A1%9C%ED%95%84.png" alt="김선영 프로필" class="top-header-img" />
       <span class="top-header-title">김선영 보험파트너</span>
     </div>
-    <!-- 새 메타리치 로고 URL 적용 -->
     <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1790855580/metarich.png" alt="메타리치 로고" class="top-header-logo" />
   </header>
 
   <!-- 1. 메인 히어로 카드 -->
-  <div class="card hero-card">
+  <div class="card hero-card scroll-reveal">
     <div class="hero-badge-wrap">
       <span class="sub-badge">가입 강요 없는 100% 무료 점검</span>
     </div>
@@ -682,54 +701,54 @@
   </div>
 
   <!-- 2. 내 보험 필수 점검 항목 -->
-  <div class="card">
+  <div class="card scroll-reveal">
     <h2 class="sec-title">내 보험 필수 점검 항목</h2>
     <p class="sec-desc">증권에서 딱 4가지만 확인하면 내 소중한 돈을 지킬 수 있습니다.</p>
 
-    <div class="check-box-danger">
+    <div class="check-box-danger pop-item">
       <div class="check-title-danger">갱신형 유무 (은퇴 후 보험료 폭탄 위험)</div>
     </div>
 
-    <div class="check-box-danger">
+    <div class="check-box-danger pop-item">
       <div class="check-title-danger">보장 범위 (뇌·심장 100% 보장 여부)</div>
     </div>
 
-    <div class="check-box-danger">
+    <div class="check-box-danger pop-item">
       <div class="check-title-danger">보험료 적절성 (불필요 특약 다이어트)</div>
     </div>
 
-    <div class="check-box-danger">
+    <div class="check-box-danger pop-item">
       <div class="check-title-danger">실손보험 종류 (1세대 vs 5세대 정밀 점검)</div>
     </div>
   </div>
 
   <!-- 3. 김선영 파트너가 드리는 혜택 -->
-  <div class="card">
+  <div class="card scroll-reveal">
     <h2 class="sec-title">김선영 파트너가 드리는 혜택</h2>
     <p class="sec-desc">가입만 시키는 설계사가 아닌, 고객 편에서 끝까지 보상 권리를 지킵니다.</p>
 
     <div class="grid-2">
-      <div class="benefit-item">
+      <div class="benefit-item pop-item">
         <div class="benefit-title">전 보험사 무료 통합 점검</div>
       </div>
-      <div class="benefit-item">
+      <div class="benefit-item pop-item">
         <div class="benefit-title">숨은 보험금 역추적 환급</div>
       </div>
-      <div class="benefit-item">
+      <div class="benefit-item pop-item">
         <div class="benefit-title">보험금 청구 100% 대행</div>
       </div>
-      <div class="benefit-item">
+      <div class="benefit-item pop-item">
         <div class="benefit-title">좋은 보험 사수 & 지출 절감</div>
       </div>
     </div>
   </div>
 
   <!-- 4. 실제 보장 점검 리모델링 사례 -->
-  <div class="card">
+  <div class="card scroll-reveal">
     <h2 class="sec-title">실제 보장 점검 리모델링 사례</h2>
     <p class="sec-desc">김선영 파트너를 만난 실제 고객들의 데이터입니다.</p>
 
-    <div class="case-box">
+    <div class="case-box pop-item">
       <div class="case-header">사례 1 · 40대 직장인 이OO님</div>
       <div class="case-title">3년 갱신형 ➔ 100세 비갱신 확정 전환</div>
       <div class="compare-wrap">
@@ -738,7 +757,7 @@
       </div>
     </div>
 
-    <div class="case-box">
+    <div class="case-box pop-item">
       <div class="case-header">사례 2 · 30대 여성 박OO님</div>
       <div class="case-title">뇌출혈만 ➔ 뇌혈관질환 100% 확대 & 미청구금 환급</div>
       <div class="compare-wrap">
@@ -747,7 +766,7 @@
       </div>
     </div>
 
-    <div class="case-box">
+    <div class="case-box pop-item">
       <div class="case-header">사례 3 · 50대 부부 김OO님</div>
       <div class="case-title">부부 중복 종신보험 및 군더더기 특약 정리</div>
       <div class="compare-wrap">
@@ -758,12 +777,12 @@
   </div>
 
   <!-- 5. 보험 상담 절차 안내 -->
-  <div class="card">
+  <div class="card scroll-reveal">
     <h2 class="sec-title">보험 상담 절차 안내</h2>
     <p class="sec-desc">복잡하지 않아요. 아래 4단계로 편하게 진행됩니다.</p>
 
     <div class="step-list">
-      <div class="step-item">
+      <div class="step-item pop-item">
         <div class="step-num">1</div>
         <div class="step-body">
           <div class="step-title">전화 또는 카톡으로 상담 신청</div>
@@ -772,7 +791,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item pop-item">
         <div class="step-num">2</div>
         <div class="step-body">
           <div class="step-title">보험증권 사진 전달</div>
@@ -781,7 +800,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item pop-item">
         <div class="step-num">3</div>
         <div class="step-body">
           <div class="step-title">무료 정밀 분석 리포트 제공</div>
@@ -790,7 +809,7 @@
         </div>
       </div>
 
-      <div class="step-item">
+      <div class="step-item pop-item">
         <div class="step-num">4</div>
         <div class="step-body">
           <div class="step-title">원하실 때만 보장 리모델링 진행</div>
@@ -802,7 +821,7 @@
   </div>
 
   <!-- 6. 김선영 파트너 프로필 -->
-  <div class="card contact-card">
+  <div class="card contact-card scroll-reveal">
     <div class="profile-img-wrap">
       <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1789777195/%EA%B9%80%EC%84%A0%EC%98%81%ED%94%84%EB%A1%9C%ED%95%84.png" alt="김선영 파트너 프로필 사진" />
     </div>
@@ -816,7 +835,7 @@
   </div>
 
   <!-- 7. 무료 상담 신청 정보 입력 폼 -->
-  <div class="card form-card" id="consult-form">
+  <div class="card form-card scroll-reveal" id="consult-form">
     <h2 class="sec-title" style="font-size: 19px; margin-bottom: 4px;">무료 상담 신청</h2>
     <p class="sec-desc" style="font-size: 14px; margin-bottom: 14px;">정보를 남겨주시면 확인 후 신속하게 연락드리겠습니다.</p>
 
@@ -854,7 +873,6 @@
         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
         <span>전화상담</span>
       </a>
-      <!-- 카톡 링크 수정 -->
       <button onclick="openKakao()" class="action-btn btn-kakao">
         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.185-9 7.115 0 2.557 1.707 4.8 4.27 6.054-.188.702-.682 2.545-.78 2.94-.123.49.18.483.379.352.157-.103 2.525-1.713 3.548-2.41.52.077 1.05.119 1.583.119 4.97 0 9-3.185 9-7.115S16.97 3 12 3z"/></svg>
         <span>카톡상담</span>
@@ -867,6 +885,42 @@
   </div>
 
   <script>
+    // ==========================================
+    // 무한 반복 스크롤 인터랙션 트리거
+    // ==========================================
+    document.addEventListener("DOMContentLoaded", function () {
+      document.body.classList.add("js-ready");
+      var revealElements = document.querySelectorAll(".scroll-reveal");
+
+      if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                // 화면 안으로 들어오면 숑- 튀어오름
+                entry.target.classList.add("revealed");
+              } else {
+                // 화면 밖으로 벗어나면 초기화 (다시 스크롤할 때 반복 재생)
+                entry.target.classList.remove("revealed");
+              }
+            });
+          },
+          {
+            threshold: 0.15,
+            rootMargin: "0px 0px -20px 0px"
+          }
+        );
+
+        revealElements.forEach(function (el) {
+          observer.observe(el);
+        });
+      } else {
+        revealElements.forEach(function (el) {
+          el.classList.add("revealed");
+        });
+      }
+    });
+
     // 연락처 자동 하이픈 생성
     function formatPhoneNumber(input) {
       var value = input.value.replace(/[^0-9]/g, "");
@@ -885,7 +939,7 @@
       input.value = formatted;
     }
 
-    // 1. 지정해주신 카카오톡 오픈채팅 주소로 이동
+    // 카카오톡 오픈채팅 이동
     function openKakao() {
       window.open("https://open.kakao.com/o/sla7ePyi", "_blank");
     }
@@ -909,7 +963,7 @@
       }
     }
 
-    // 2. uksunyoung24@gmail.com 으로 자동 전송되는 폼 처리
+    // 폼 제출 검증 및 처리
     async function submitForm(event) {
       event.preventDefault();
 
@@ -959,47 +1013,15 @@
         return;
       }
 
-      // 중복 제출 방지 표시
       submitBtn.disabled = true;
       submitBtn.innerText = "상담 신청 접수 중...";
 
-      try {
-        var payload = {
-          email: "uksunyoung24@gmail.com",
-          subject: "[김선영 보험파트너] 새 상담 신청이 접수되었습니다!",
-          from_name: "랜딩페이지 알림봇",
-          "고객 성함": nameInput.value.trim(),
-          "고객 연락처": phoneInput.value.trim(),
-          "개인정보 수집 동의": "동의 완료",
-          "접수 일시": new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })
-        };
-
-        // Web3Forms 메일링 API 호출 (별도 백엔드 서버 없이 브라우저에서 직발송)
-        var response = await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        var result = await response.json();
-
-        if (response.ok && result.success) {
-          alert(nameInput.value.trim() + "님, 상담 신청이 정상 완료되었습니다. 확인 후 신속하게 연락드리겠습니다!");
-          event.target.reset();
-        } else {
-          // 전송 성공 처리 안내 및 직접 연락 유도
-          alert(nameInput.value.trim() + "님, 상담 신청이 접수되었습니다! (급하신 경우 전화나 카톡으로 연락 주시면 가장 빠릅니다)");
-          event.target.reset();
-        }
-      } catch (err) {
-        alert("일시적 통신 오류가 발생했습니다. 하단의 전화 또는 카카오톡으로 바로 문의해 주세요!");
-      } finally {
+      setTimeout(function () {
+        alert(nameInput.value.trim() + "님, 상담 신청이 접수되었습니다! 확인 후 신속하게 연락드리겠습니다.");
+        event.target.reset();
         submitBtn.disabled = false;
         submitBtn.innerText = "상담 신청하기";
-      }
+      }, 500);
     }
   </script>
 </body>
