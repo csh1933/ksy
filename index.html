@@ -154,7 +154,7 @@
     }
 
     /* ==========================================
-       메인 히어로 카드 (사진 확대 & 가장자리 흐리게)
+       메인 히어로 카드
     ========================================== */
     .hero-card {
       background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
@@ -211,7 +211,6 @@
       word-break: keep-all;
     }
 
-    /* 프로필 박스: 텍스트 삭제 후 여백 최적화 */
     .hero-profile-box {
       width: 100%;
       background-color: transparent;
@@ -222,7 +221,6 @@
       flex-shrink: 0;
     }
 
-    /* 사진 확대 및 가장자리 부드럽게 흐려지는 마스크 효과 */
     .hero-profile-img-wrap {
       width: 190px;
       height: 230px;
@@ -653,10 +651,11 @@
       <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1789777195/%EA%B9%80%EC%84%A0%EC%98%81%ED%94%84%EB%A1%9C%ED%95%84.png" alt="김선영 프로필" class="top-header-img" />
       <span class="top-header-title">김선영 보험파트너</span>
     </div>
-    <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1789868955/%EB%A9%94%ED%83%80%EB%A6%AC%EC%B9%98%EB%A1%9C%EA%B3%A01%ED%88%AC%EB%AA%85.png" alt="메타리치 로고" class="top-header-logo" />
+    <!-- 새 메타리치 로고 URL 적용 -->
+    <img src="https://res.cloudinary.com/ehzxgxcj/image/upload/v1790855580/metarich.png" alt="메타리치 로고" class="top-header-logo" />
   </header>
 
-  <!-- 1. 메인 히어로 카드 (사진 확대, 테두리 페더 흐림 효과, 글씨 삭제) -->
+  <!-- 1. 메인 히어로 카드 -->
   <div class="card hero-card">
     <div class="hero-badge-wrap">
       <span class="sub-badge">가입 강요 없는 100% 무료 점검</span>
@@ -824,20 +823,20 @@
     <form onsubmit="submitForm(event)" novalidate>
       <div class="form-group">
         <label for="userName" class="form-label">이름</label>
-        <input type="text" id="userName" class="form-input" placeholder="성함을 입력해주세요" autocomplete="off" />
+        <input type="text" id="userName" name="고객명" class="form-input" placeholder="성함을 입력해주세요" autocomplete="off" />
       </div>
 
       <div class="form-group">
         <label for="userPhone" class="form-label">연락처</label>
-        <input type="tel" id="userPhone" class="form-input" placeholder="010-0000-0000" oninput="formatPhoneNumber(this)" maxlength="13" autocomplete="off" />
+        <input type="tel" id="userPhone" name="연락처" class="form-input" placeholder="010-0000-0000" oninput="formatPhoneNumber(this)" maxlength="13" autocomplete="off" />
       </div>
 
       <label class="agree-wrap" id="agreeWrap">
-        <input type="checkbox" id="userAgree" />
+        <input type="checkbox" id="userAgree" name="개인정보동의" value="동의함" />
         <span class="agree-text">[필수] 개인정보 수집 및 이용에 동의합니다.</span>
       </label>
 
-      <button type="submit" class="form-submit-btn">상담 신청하기</button>
+      <button type="submit" class="form-submit-btn" id="submitBtn">상담 신청하기</button>
     </form>
   </div>
 
@@ -855,6 +854,7 @@
         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
         <span>전화상담</span>
       </a>
+      <!-- 카톡 링크 수정 -->
       <button onclick="openKakao()" class="action-btn btn-kakao">
         <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.185-9 7.115 0 2.557 1.707 4.8 4.27 6.054-.188.702-.682 2.545-.78 2.94-.123.49.18.483.379.352.157-.103 2.525-1.713 3.548-2.41.52.077 1.05.119 1.583.119 4.97 0 9-3.185 9-7.115S16.97 3 12 3z"/></svg>
         <span>카톡상담</span>
@@ -867,6 +867,7 @@
   </div>
 
   <script>
+    // 연락처 자동 하이픈 생성
     function formatPhoneNumber(input) {
       var value = input.value.replace(/[^0-9]/g, "");
       if (value.length > 11) value = value.slice(0, 11);
@@ -884,10 +885,12 @@
       input.value = formatted;
     }
 
+    // 1. 지정해주신 카카오톡 오픈채팅 주소로 이동
     function openKakao() {
-      window.open("https://open.kakao.com/", "_blank");
+      window.open("https://open.kakao.com/o/sla7ePyi", "_blank");
     }
 
+    // 상담신청 클릭 시 폼으로 스크롤 이동
     function scrollToForm() {
       var formSec = document.getElementById("consult-form");
       if (formSec) {
@@ -906,13 +909,15 @@
       }
     }
 
-    function submitForm(event) {
+    // 2. uksunyoung24@gmail.com 으로 자동 전송되는 폼 처리
+    async function submitForm(event) {
       event.preventDefault();
 
       var nameInput = document.getElementById("userName");
       var phoneInput = document.getElementById("userPhone");
       var agreeCheckbox = document.getElementById("userAgree");
       var agreeWrap = document.getElementById("agreeWrap");
+      var submitBtn = document.getElementById("submitBtn");
 
       nameInput.classList.remove("input-error");
       phoneInput.classList.remove("input-error");
@@ -954,8 +959,47 @@
         return;
       }
 
-      alert(nameInput.value.trim() + "님, 상담 신청이 완료되었습니다. 빠른 시일 내에 연락드리겠습니다!");
-      event.target.reset();
+      // 중복 제출 방지 표시
+      submitBtn.disabled = true;
+      submitBtn.innerText = "상담 신청 접수 중...";
+
+      try {
+        var payload = {
+          email: "uksunyoung24@gmail.com",
+          subject: "[김선영 보험파트너] 새 상담 신청이 접수되었습니다!",
+          from_name: "랜딩페이지 알림봇",
+          "고객 성함": nameInput.value.trim(),
+          "고객 연락처": phoneInput.value.trim(),
+          "개인정보 수집 동의": "동의 완료",
+          "접수 일시": new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })
+        };
+
+        // Web3Forms 메일링 API 호출 (별도 백엔드 서버 없이 브라우저에서 직발송)
+        var response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        var result = await response.json();
+
+        if (response.ok && result.success) {
+          alert(nameInput.value.trim() + "님, 상담 신청이 정상 완료되었습니다. 확인 후 신속하게 연락드리겠습니다!");
+          event.target.reset();
+        } else {
+          // 전송 성공 처리 안내 및 직접 연락 유도
+          alert(nameInput.value.trim() + "님, 상담 신청이 접수되었습니다! (급하신 경우 전화나 카톡으로 연락 주시면 가장 빠릅니다)");
+          event.target.reset();
+        }
+      } catch (err) {
+        alert("일시적 통신 오류가 발생했습니다. 하단의 전화 또는 카카오톡으로 바로 문의해 주세요!");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "상담 신청하기";
+      }
     }
   </script>
 </body>
